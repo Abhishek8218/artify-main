@@ -4,7 +4,8 @@ import "@styles/Login.scss";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { toast,Toaster } from "react-hot-toast";
+import {toast, Toaster }from "react-hot-toast";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
+      toast.success("Logging You In....")
       const response = await signIn("credentials", {
         redirect: false,
         email: email,
@@ -24,7 +26,7 @@ const Login = () => {
       });
 
       if (response.ok) {
-        toast.success("Logging You In....")
+      
         router.push("/")
       }
 
@@ -32,7 +34,6 @@ const Login = () => {
         setError("Invalid email or password. Please try again!");
       }
     } catch (err) {
-      toast.error("Error while Login")
       console.log(err);
     }
   };
@@ -42,9 +43,8 @@ const Login = () => {
   // };
 
   return (
-    
     <div className="login">
-      <Toaster  position="top-center" reverseOrder={true}/>
+       <Toaster position="top-center" reverseOrder={true} />
       <img src="/assets/login.jpg" alt="login" className="login_decor" />
       <div className="login_content">
         <form className="login_content_form" onSubmit={handleSubmit}>
