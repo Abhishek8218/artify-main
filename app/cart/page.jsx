@@ -1,6 +1,5 @@
 "use client";
 
-
 import {
   AddCircle,
   ArrowCircleLeft,
@@ -12,11 +11,13 @@ import Loader from "@components/Loader";
 import "@styles/Cart.scss";
 import getStripe from "@lib/getStripe";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const Cart = () => {
   const { data: session, update } = useSession();
   const cart = session?.user?.cart;
   const userId = session?.user?._id;
+  const router = useRouter();
 
   const updateCart = async (cart) => {
     const response = await fetch(`/api/user/${userId}/cart`, {
@@ -26,34 +27,10 @@ const Cart = () => {
       },
       body: JSON.stringify({ cart }),
     });
+    // console.log("cart data:- ", cart);
+
     const data = await response.json();
     update({ user: { cart: data } });
-  };
-
-  const calcSubtotal = (cart) => {
-    return cart?.reduce((total, item) => {
-      return total + item.quantity * item.price;
-    }, 0);
-  };
-
-  const increaseQty = (cartItem) => {
-    const newCart = cart?.map((item) => {
-      if (item === cartItem) {
-        item.quantity += 1;
-        return item;
-      } else return item;
-    });
-    updateCart(newCart);
-  };
-
-  const decreaseQty = (cartItem) => {
-    const newCart = cart?.map((item) => {
-      if (item === cartItem && item.quantity > 1) {
-        item.quantity -= 1;
-        return item;
-      } else return item;
-    });
-    updateCart(newCart);
   };
 
   const removeFromCart = (cartItem) => {
@@ -61,10 +38,8 @@ const Cart = () => {
     updateCart(newCart);
   };
 
-  const subtotal = calcSubtotal(cart);
-
   const handleCheckout = async () => {
-    const stripe = await getStripe()
+    const stripe = await getStripe();
 
     const response = await fetch("/api/stripe", {
       method: "POST",
@@ -72,35 +47,36 @@ const Cart = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ cart, userId }),
-    })
+    });
 
     if (response.statusCode === 500) {
-      return
+      return;
     }
 
-    const data = await response.json()
+    const data = await response.json();
 
-    toast.loading("Redirecting to checkout...")
+    toast.loading("Redirecting to checkout...");
 
-    const result = stripe.redirectToCheckout({ sessionId: data.id })
+    const result = stripe.redirectToCheckout({ sessionId: data.id });
 
     if (result.error) {
-      console.log(result.error.message)
-      toast.error("Something went wrong")
+      console.log(result.error.message);
+      toast.error("Something went wrong");
     }
-  }
+  };
+  const navigateToWorkDetail = (workId) => {
+    router.push(`/work-details?id=${workId}`); // Replace "/work" with the actual path of your work detail page
+  };
 
-  console.log("cart data", cart)
-  return !session?.user?.cart ? <Loader /> : (
+  // console.log("cart data", cart);
+  return !session?.user?.cart ? (
+    <Loader />
+  ) : (
     <>
-     
       <div className="cart">
         <div className="details">
           <div className="top">
             <h1>Your Cart</h1>
-            <h2>
-              Subtotal: <span>${subtotal}</span>
-            </h2>
           </div>
 
           {cart?.length === 0 && <h3>Empty Cart</h3>}
@@ -110,7 +86,13 @@ const Cart = () => {
               {cart?.map((item, index) => (
                 <div className="item" key={index}>
                   <div className="item_info">
-                    <img src={`data:image/*;base64,${Buffer.from(item.image).toString('base64')}`} alt="product" />
+                    <img
+                      src={`data:image/*;base64,${Buffer.from(
+                        item.image
+                      ).toString("base64")}`}
+                      alt="product"
+                      onClick={() => navigateToWorkDetail(item.workId)}
+                    />
                     <div className="text">
                       <h3>{item.title}</h3>
                       <p>Category: {item.category}</p>
@@ -118,43 +100,25 @@ const Cart = () => {
                     </div>
                   </div>
 
-                  <div className="quantity">
-                    <AddCircle
-                      onClick={() => increaseQty(item)}
-                      sx={{
-                        fontSize: "18px",
-                        color: "grey",
-                        cursor: "pointer",
-                      }}
-                    />
-                    <h3>{item.quantity}</h3>
-                    <RemoveCircle
-                      onClick={() => decreaseQty(item)}
-                      sx={{
-                        fontSize: "18px",
-                        color: "grey",
-                        cursor: "pointer",
-                      }}
-                    />
-                  </div>
-
-                  <div className="price">
-                    <h2>${item.quantity * item.price}</h2>
-                    <p>${item.price} / each</p>
+                  <div>
+                    <h1>${item.price} </h1>
                   </div>
 
                   <div className="remove">
-                    <Delete
-                      sx={{ cursor: "pointer" }}
-                      onClick={() => removeFromCart(item)}
-                    />
+                    <span className="delete-icon">
+                      <Delete onClick={() => removeFromCart(item)} />
+                    </span>
                   </div>
                 </div>
               ))}
 
               <div className="bottom">
                 <a href="/">
-                  <ArrowCircleLeft /> Continue Shopping
+                  <span className="back-icon">
+                    <ArrowCircleLeft
+                      sx={{ cursor: "pointer", fontSize: "30px" }}
+                    />
+                  </span>
                 </a>
                 <button onClick={handleCheckout}>CHECK OUT NOW</button>
               </div>

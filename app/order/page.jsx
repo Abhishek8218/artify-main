@@ -9,7 +9,7 @@ const Order = () => {
   const { data: session } = useSession()
 
   const orders = session?.user?.orders
-  console.log("orders: ",orders)
+  // console.log("orders: ",orders)
 
   return !orders? <Loader /> : (
     <>
@@ -28,7 +28,16 @@ const Order = () => {
                 {order.orderItems.map((item, index) => (
                   <div className="product" key={index}>
                     <div className="product-info">
-                      <img src={item.image} alt={item.title}/>
+                 
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="product-image"
+                        />
+                    
+                      {/* <img  src={`data:image/*;base64,${Buffer.from(
+                        item.image
+                      ).toString("base64")}`} alt={item.title}/> */}
                       <div className="orderItemInfo">
                         <h4>{item.title}</h4>
                         <p>Product ID: {item.productId}</p>

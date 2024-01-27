@@ -42,32 +42,34 @@ export const PATCH = async (req, { params }) => {
     /* Get an array of uploaded photos */
     const photos = data.getAll("workPhotos");
 
-    console.log("Received photos:", photos);
+    // console.log("Received photos:", photos);
     const existingWork = await Work.findById(params.id);
 
     if (!existingWork) {
-      console.error("The Work Not Found");
+      // console.error("The Work Not Found");
       return new Response("The Work Not Found", { status: 404 });
     }
     const existingPhotos = existingWork.workPhotos || [];
-    const workPhotos = existingPhotos.slice();
-    // const workPhotos = [];
+     const workPhotos = existingPhotos.slice();
+
 
     /* Process and store each photo */
     for (const photo of photos) {
+      
       const size = photo.size;
-      console.log("Type of photo:", typeof photo);
+      // console.log("Type of photo:", typeof photo);
 
       if (size === undefined || size === 0) {
-        console.warn("Skipping image with undefined size.");
+        // console.warn("Skipping image with undefined size.");
         continue;
       }
 
       const buffer = await readPhotoData(photo);
       workPhotos.push(buffer);
-    }
+    
+  }
 
-    console.log("Processed workPhotos:", workPhotos);
+    // console.log("Processed workPhotos:", workPhotos);
 
     /* Find the existing Work */
     
@@ -82,7 +84,7 @@ export const PATCH = async (req, { params }) => {
     await existingWork.save();
 
     // Return a success response
-    console.log("Successfully updated the Work");
+    // console.log("Successfully updated the Work");
     return new Response("Successfully updated the Work", { status: 200 });
   } catch (err) {
     console.error("Error updating the Work:", err);

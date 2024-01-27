@@ -3,14 +3,12 @@ import {
   ArrowBackIosNew,
   ArrowForwardIos,
   Delete,
-  Favorite,
-  FavoriteBorder,
 } from "@mui/icons-material";
 import "@styles/WorkCard.scss";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
+import { toast, Toaster } from "react-hot-toast";
 const WorkCard = ({ work }) => {
   /* SLIDER FOR PHOTOS */
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -37,29 +35,18 @@ const WorkCard = ({ work }) => {
         await fetch(`api/work/${work._id}`, {
           method: "DELETE",
         });
+        toast.success("Work Deleted Successfully")
         window.location.reload();
       } catch (err) {
+        toast.error("Failed to Delete Work")
         console.log(err);
       }
     }
   };
 
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
   const userId = session?.user?._id;
 
-  /* ADD TO WISHLIST */
-  const wishlist = session?.user?.wishlist;
-
-  const isLiked = wishlist?.find((item) => item?._id === work._id);
-
-  const patchWishlist = async () => {
-    const response = await fetch(`api/user/${userId}/wishlist/${work._id}`, {
-      method: "PATCH",
-    });
-    const data = await response.json();
-    update({ user: { wishlist: data.wishlist } }); // update session
-  };
-console.log(work)
   return (
     <div
       className="work-card"
@@ -67,6 +54,7 @@ console.log(work)
         router.push(`/work-details?id=${work._id}`);
       }}
     >
+    <Toaster position="top-center" reverseOrder={true} />
       <div className="slider-container">
         <div
           className="slider"
@@ -102,19 +90,18 @@ console.log(work)
         <div>
           <h3>{work.title}</h3>
           <div className="creator">
-  {work.creator && work.creator.profileImage ? (
-   <img src={`data:image/*;base64,${Buffer.from(work.creator.profileImage.data).toString('base64')}`} alt="creator" />
-
-  ) : (
-    <span>No creator information available</span>
-  )}
-  <span>{work.creator && work.creator.username}</span> in <span>{work.category}</span>
-</div>
+            {work.creator && work.creator.profileImage ? (
+              <img src={`data:image/*;base64,${Buffer.from(work.creator.profileImage.data).toString('base64')}`} alt="creator" />
+            ) : (
+              <span>No creator information available</span>
+            )}
+            <span>{work.creator && work.creator.username}</span> in <span>{work.category}</span>
+          </div>
         </div>
         <div className="price">${work.price}</div>
       </div>
 
-      {userId === work?.creator?._id ? (
+      {userId === work?.creator?._id && (
         <div
           className="icon"
           onClick={(e) => {
@@ -130,35 +117,6 @@ console.log(work)
               fontSize: "30px",
             }}
           />
-        </div>
-      ) : (
-        <div
-          className="icon"
-          onClick={(e) => {
-            e.stopPropagation();
-            patchWishlist();
-          }}
-        >
-          {isLiked ? (
-            <Favorite
-              sx={{
-                borderRadius: "50%",
-                backgroundColor: "white",
-                color: "red",
-                padding: "5px",
-                fontSize: "30px",
-              }}
-            />
-          ) : (
-            <FavoriteBorder
-              sx={{
-                borderRadius: "50%",
-                backgroundColor: "white",
-                padding: "5px",
-                fontSize: "30px",
-              }}
-            />
-          )}
         </div>
       )}
     </div>

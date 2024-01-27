@@ -10,6 +10,7 @@
 
   @include sm {
     padding: 10px;
+ 
   }
 
   img {
@@ -61,6 +62,13 @@
       span {
         font-weight: 700;
       }
+      @include sm{
+        display: none;
+      }
+    }
+    .cart2{
+      display: flex;
+      align-items: center;
     }
 
     &_account {

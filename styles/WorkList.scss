@@ -7,7 +7,8 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
-
+  background-color: rgba(245, 244, 244, 0.816);
+padding-top: 60px;
   @include lg {
     padding: 0 20px 120px;
   }

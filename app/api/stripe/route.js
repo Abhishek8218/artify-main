@@ -12,26 +12,27 @@ export const POST = async (req, res) => {
         payment_method_types: ["card"],
         billing_address_collection: "auto",
         shipping_options: [
-          { shipping_rate: "shr_1OYMK6SDvAGbwgiVxkGOg7ls" },
-          { shipping_rate: "shr_1OYMMZSDvAGbwgiV6ARGEr7d" },
+          { shipping_rate: "shr_1OcoMFSDvAGbwgiVJKTQ3o9p" },
+          { shipping_rate: "shr_1OcoLVSDvAGbwgiV6yNSpslZ" },
         ],
         line_items: cart?.map((item) => {
           let imageUrls = [];
 
           // Check if item.image is an array before mapping
           if (Array.isArray(item.image)) {
-            imageUrls = item.image.map((buffer) => {
-              const base64Image = Buffer.from(buffer).toString("base64");
-              return `data:image/png;base64,${base64Image}`;
-            });
+            // imageUrls = item.image.map((buffer) => {
+            //   const base64Image = Buffer.from(buffer).toString("base64");
+            //   return `data:image/*;base64,${base64Image}`;
+            // });
+            imageUrls = item.image;
           }
           return {
           
             price_data: {
-              currency: "usd",
+              currency: "inr",
               product_data: {
                 name: item.title,
-                iamges: imageUrls,
+                images: imageUrls,
                 // images: `${req.headers.get("origin")}/${item.image}`,
                 // images:[`${item.images}`],
                 metadata: {
@@ -40,7 +41,7 @@ export const POST = async (req, res) => {
               },
               unit_amount: item.price * 100,
             },
-            quantity: item.quantity,
+            quantity: 1,
           }
         }),
         client_reference_id: userId,

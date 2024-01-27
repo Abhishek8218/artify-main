@@ -21,7 +21,7 @@ export async function POST(req) {
     for (const photo of photos) {
       const size = photo.size; 
       if (size === undefined || size === 0) {
-        console.warn("Skipping image with undefined size.");
+        // console.warn("Skipping image with undefined size.");
         continue;
       }
       const buffer = await readPhotoData(photo);

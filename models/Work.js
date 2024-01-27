@@ -21,6 +21,7 @@ const WorkSchema = new Schema({
   },
   // Store images as Binary data
   workPhotos: [{ type: Buffer }],
+  
 });
 
 const Work = models.Work || model("Work", WorkSchema);

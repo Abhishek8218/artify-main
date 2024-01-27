@@ -1,3 +1,4 @@
+import Banner from '@components/Banner'
 import Feed from '@components/Feed'
 
 
@@ -5,6 +6,7 @@ import Feed from '@components/Feed'
 const Home = () => {
   return (
     <>
+    <Banner/>
     <Feed/>
     </>
   )

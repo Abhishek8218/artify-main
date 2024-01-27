@@ -40,9 +40,9 @@ const Form = ({ type, work, setWork, handleSubmit }) => {
   };
 
   return (
-    <div className="form">
+    <div className="form" >
       <h1>{type} Your Work</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} >
         <h3>Which of these categories best describes your work?</h3>
         <div className="category-list">
           {categories?.map((item, index) => (
@@ -141,7 +141,7 @@ const Form = ({ type, work, setWork, handleSubmit }) => {
             required
           />
           <p>Now, set your PRICE</p>
-          <span>$</span>
+          <span>₹</span>
           <input
             type="number"
             placeholder="Price"

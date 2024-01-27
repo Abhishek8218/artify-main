@@ -4,7 +4,7 @@ import "@styles/Login.scss";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -35,9 +35,9 @@ const Login = () => {
     }
   };
 
-  const loginWithGoogle = () => {
-    signIn("google", { callbackUrl: "/" });
-  };
+  // const loginWithGoogle = () => {
+  //   signIn("google", { callbackUrl: "/" });
+  // };
 
   return (
     <div className="login">
@@ -63,10 +63,7 @@ const Login = () => {
           {error && <p className="error">{error}</p>}
           <button type="submit">Log In</button>
         </form>
-        <button className="google" onClick={loginWithGoogle}>
-          <p>Log In with Google</p>
-          <FcGoogle />
-        </button>
+       
         <a href="/register">Don't have an account? Sign In Here</a>
       </div>
     </div>

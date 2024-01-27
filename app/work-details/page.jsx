@@ -15,6 +15,7 @@ import {
 } from "@mui/icons-material";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { toast, Toaster } from "react-hot-toast";
 
 const WorkDetails = () => {
   const [loading, setLoading] = useState(true);
@@ -33,7 +34,7 @@ const WorkDetails = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log("work data:  ",data)
+          // console.log("work data:  ",data)
           setWork(data);
           setLoading(false);
         } else {
@@ -45,7 +46,7 @@ const WorkDetails = () => {
         setLoading(false);
       }
     };
-console.log(workId)
+// console.log(workId)
     if (workId) {
       getWorkDetails();
     }
@@ -142,6 +143,7 @@ console.log(workId)
           body: JSON.stringify({ cart: newCart }),
         });
         update({ user: { cart: newCart } });
+        toast.success("Added to Cart")
       } catch (err) {
         console.log(err);
       }
@@ -151,13 +153,13 @@ console.log(workId)
     }
   };
 
-  console.log(session?.user?.cart);
+  // console.log(session?.user?.cart);
 
   return loading ? (
     <Loader />
   ) : (
     <>
-     
+    <Toaster position="top-center" reverseOrder={true} />
       <div className="work-details">
         <div className="title">
           <h1>{work.title}</h1>

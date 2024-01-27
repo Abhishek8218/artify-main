@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { signIn } from "next-auth/react";
-
+import {toast, Toaster} from "react-hot-toast"
 const Register = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -50,19 +50,23 @@ const Register = () => {
       });
 
       if (response.ok) {
+        toast.success("Registration Successfull")
         router.push("/login");
       }
     } catch (err) {
+      toast.error("Registration Failed")
       console.log("Registration failed", err.message);
     }
   };
 
-  const loginWithGoogle = () => {
-    signIn("google", { callbackUrl: "/" });
-  };
+  // const loginWithGoogle = () => {
+  //   signIn("google", { callbackUrl: "/" });
+  // };
 
   return (
+    
     <div className="register">
+       <Toaster position="top-center" reverseOrder={true} />
       <img
         src="/assets/register.jpg"
         alt="register"
@@ -128,14 +132,7 @@ const Register = () => {
             Register
           </button>
         </form>
-        <button
-          type="button"
-          onClick={loginWithGoogle}
-          className="google"
-        >
-          <p>Log In with Google</p>
-          <FcGoogle />
-        </button>
+        
         <a href="/login">Already have an account? Log In Here</a>
       </div>
     </div>

@@ -9,7 +9,7 @@ async function getCartItems(line_items) {
     line_items?.data?.forEach(async (item) => {
       const product = await stripe.products.retrieve(item.price.product)
       const productId = product.metadata.productId
-
+// console.log("line items in order route: ", item)
       cartItems.push({
         productId,
         title: product.name,
@@ -18,7 +18,7 @@ async function getCartItems(line_items) {
         image: product.images[0],
       
       })
-      console.log("Order items:", cartItems);
+      // console.log("Order items:", cartItems);
       if (cartItems.length === line_items?.data?.length) {
         resolve(cartItems)
       }
@@ -36,13 +36,13 @@ export const POST = async (req, res) => {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
     )
-    console.log("Webhook received event:", event);
+    // console.log("Webhook received event:", event);
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object
 
       const line_items = await stripe.checkout.sessions.listLineItems( event.data.object.id )
-      console.log("Line items:", line_items);
+      // console.log("Line items:", line_items);
 
       const orderItems = await getCartItems(line_items)
       const userId = session.client_reference_id
@@ -58,12 +58,12 @@ export const POST = async (req, res) => {
 
       await connectToDB()
       const user = await User.findById(userId)
-      console.log("Found user:", user);
+      // console.log("Found user:", user);
       user.cart = []
       user.orders.push(orderData)
       await user.save()
       await user.save();
-console.log("User saved successfully");
+// console.log("User saved successfully");
 
 
       return new Response(JSON.stringify({ received: true }), { status: 200 })
