@@ -1,6 +1,7 @@
 import "@styles/globals.css";
 import Provider from "@components/Provider";
 import NavBar from "@components/NavBar";
+import Login from "./login/page";
 
 export const metadata = {
   title: "Artify",
@@ -8,10 +9,12 @@ export const metadata = {
 };
 
 const layout = ({ children }) => {
+  
   return (
     <html lang="en">
       <body>
         <Provider>
+         
         <NavBar/>
           <main>{children}</main>
         </Provider>
