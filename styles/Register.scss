@@ -99,16 +99,28 @@
       @include GoogleButton;
     }
 
-    a {
-      text-decoration: none;
-      color: white;
-      font-size: 13px;
-      margin-top: 10px;
-      text-align: center;
+  }
+}
 
-      &:hover {
-        text-decoration: underline;
-      }
-    }
+.login{
+  display: flex;
+  width: auto;
+  height: auto;
+  background-color: transparent;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  @include mm{
+    flex-direction: column;
+  }
+  a{
+    text-decoration: underline;
+    color: rgb(29, 153, 226);
+
+  }
+  p {
+    font-size: 16px;
+    color: white;
   }
 }

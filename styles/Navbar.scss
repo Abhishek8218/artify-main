@@ -111,8 +111,10 @@
         cursor: pointer;
 
         &:hover {
+          text-decoration: underline;
           color: $pinkred;
           background-color: rgba(217, 213, 213, 0.2);
+          
         }
       }
     }

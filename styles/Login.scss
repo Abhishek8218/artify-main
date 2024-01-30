@@ -76,7 +76,7 @@
       button {
         margin-top: 15px;
         width: 250px;
-  
+
         @include buttonStyle;
       }
     }
@@ -88,23 +88,29 @@
       @include GoogleButton;
     }
 
-    a {
-      text-decoration: none;
-      color: white;
-      font-size: 17px;
-      font-weight: 600;
-      text-align: center;
-      margin: 15px 0;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-
     p {
       color: white;
       font-size: 13px;
       text-align: center;
     }
+  }
+}
+
+.register{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  @include mm{
+    flex-direction: column;
+  }
+  a{
+    text-decoration: underline;
+    color: rgb(29, 153, 226);
+
+  }
+  p{
+    font-size: 16px;
   }
 }

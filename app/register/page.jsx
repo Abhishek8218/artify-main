@@ -15,7 +15,6 @@ const Register = () => {
     confirmPassword: "",
     profileImage: null,
   });
-
   const handleChange = (e) => {
     e.preventDefault();
     const { name, value, files } = e.target;
@@ -36,7 +35,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const registerForm = new FormData();
 
@@ -58,6 +57,8 @@ const Register = () => {
       console.log("Registration failed", err.message);
     }
   };
+
+
 
   // const loginWithGoogle = () => {
   //   signIn("google", { callbackUrl: "/" });
@@ -121,19 +122,21 @@ const Register = () => {
             <img src="/assets/addImage.png" alt="add profile" />
             <p>Upload Profile Photo</p>
           </label>
-          {formData.profileImage && (
+          {formData.profileImage ? (
             <img
               src={URL.createObjectURL(formData.profileImage)}
               alt="Profile"
               style={{ maxWidth: "80px", maxHeight: "80px" }}
             />
-          )}
-          <button type="submit" disabled={!passwordMatch}>
+          ): (<p style={{ color: "red", fontSize:"12px",margin: "-10px" }}>***Profile Image is must***</p>)}
+          <button type="submit" disabled={!formData.profileImage ||!passwordMatch}>
             Register
           </button>
         </form>
-        
-        <a href="/login">Already have an account? Log In Here</a>
+        <div className="login">
+          <p>Already have an account?</p>
+        <a href="/login">Login Here</a>
+        </div>
       </div>
     </div>
   );
